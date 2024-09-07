@@ -50,7 +50,7 @@ defmodule LvbugWeb.CoreComponents do
       data-cancel={JS.exec(@on_cancel, "phx-remove")}
       class="relative z-50 hidden"
     >
-      <div id={"#{@id}-bg"} class="bg-zinc-50/90 fixed inset-0 transition-opacity" aria-hidden="true" />
+      <div id={"#{@id}-bg"} class="fixed inset-0 transition-opacity bg-zinc-50/90" aria-hidden="true" />
       <div
         class="fixed inset-0 overflow-y-auto"
         aria-labelledby={"#{@id}-title"}
@@ -59,23 +59,23 @@ defmodule LvbugWeb.CoreComponents do
         aria-modal="true"
         tabindex="0"
       >
-        <div class="flex min-h-full items-center justify-center">
+        <div class="flex items-center justify-center min-h-full">
           <div class="w-full max-w-3xl p-4 sm:p-6 lg:py-8">
             <.focus_wrap
               id={"#{@id}-container"}
               phx-window-keydown={JS.exec("data-cancel", to: "##{@id}")}
               phx-key="escape"
               phx-click-away={JS.exec("data-cancel", to: "##{@id}")}
-              class="shadow-zinc-700/10 ring-zinc-700/10 relative hidden rounded-2xl bg-white p-14 shadow-lg ring-1 transition"
+              class="relative hidden transition bg-white shadow-lg shadow-zinc-700/10 ring-zinc-700/10 rounded-2xl p-14 ring-1"
             >
               <div class="absolute top-6 right-5">
                 <button
                   phx-click={JS.exec("data-cancel", to: "##{@id}")}
                   type="button"
-                  class="-m-3 flex-none p-3 opacity-20 hover:opacity-40"
+                  class="flex-none p-3 -m-3 opacity-20 hover:opacity-40"
                   aria-label={gettext("close")}
                 >
-                  <.icon name="hero-x-mark-solid" class="h-5 w-5" />
+                  <.icon name="hero-x-mark-solid" class="w-5 h-5" />
                 </button>
               </div>
               <div id={"#{@id}-content"}>
@@ -122,13 +122,13 @@ defmodule LvbugWeb.CoreComponents do
       {@rest}
     >
       <p :if={@title} class="flex items-center gap-1.5 text-sm font-semibold leading-6">
-        <.icon :if={@kind == :info} name="hero-information-circle-mini" class="h-4 w-4" />
-        <.icon :if={@kind == :error} name="hero-exclamation-circle-mini" class="h-4 w-4" />
+        <.icon :if={@kind == :info} name="hero-information-circle-mini" class="w-4 h-4" />
+        <.icon :if={@kind == :error} name="hero-exclamation-circle-mini" class="w-4 h-4" />
         <%= @title %>
       </p>
       <p class="mt-2 text-sm leading-5"><%= msg %></p>
-      <button type="button" class="group absolute top-1 right-1 p-2" aria-label={gettext("close")}>
-        <.icon name="hero-x-mark-solid" class="h-5 w-5 opacity-40 group-hover:opacity-70" />
+      <button type="button" class="absolute p-2 group top-1 right-1" aria-label={gettext("close")}>
+        <.icon name="hero-x-mark-solid" class="w-5 h-5 opacity-40 group-hover:opacity-70" />
       </button>
     </div>
     """
@@ -158,7 +158,7 @@ defmodule LvbugWeb.CoreComponents do
         hidden
       >
         <%= gettext("Attempting to reconnect") %>
-        <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
+        <.icon name="hero-arrow-path" class="w-3 h-3 ml-1 animate-spin" />
       </.flash>
 
       <.flash
@@ -170,7 +170,7 @@ defmodule LvbugWeb.CoreComponents do
         hidden
       >
         <%= gettext("Hang in there while we get back on track") %>
-        <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
+        <.icon name="hero-arrow-path" class="w-3 h-3 ml-1 animate-spin" />
       </.flash>
     </div>
     """
@@ -204,7 +204,7 @@ defmodule LvbugWeb.CoreComponents do
     <.form :let={f} for={@for} as={@as} {@rest}>
       <div class="mt-10 space-y-8 bg-white">
         <%= render_slot(@inner_block, f) %>
-        <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
+        <div :for={action <- @actions} class="flex items-center justify-between gap-6 mt-2">
           <%= render_slot(action, f) %>
         </div>
       </div>
@@ -335,7 +335,7 @@ defmodule LvbugWeb.CoreComponents do
       <select
         id={@id}
         name={@name}
-        class="mt-2 block w-full rounded-md border border-gray-300 bg-white shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm"
+        class="block w-full mt-2 bg-white border border-gray-300 rounded-md shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm"
         multiple={@multiple}
         {@rest}
       >
@@ -405,16 +405,17 @@ defmodule LvbugWeb.CoreComponents do
   @doc """
   Generates a generic error message.
   """
-  slot :inner_block, required: true
 
-  def error(assigns) do
-    ~H"""
-    <p class="mt-3 flex gap-3 text-sm leading-6 text-rose-600">
-      <.icon name="hero-exclamation-circle-mini" class="mt-0.5 h-5 w-5 flex-none" />
-      <%= render_slot(@inner_block) %>
-    </p>
-    """
-  end
+  # slot :inner_block, required: true
+
+  # def error(assigns) do
+  #   ~H"""
+  #   <p class="flex gap-3 mt-3 text-sm leading-6 text-rose-600">
+  #     <.icon name="hero-exclamation-circle-mini" class="mt-0.5 h-5 w-5 flex-none" />
+  #     <%= render_slot(@inner_block) %>
+  #   </p>
+  #   """
+  # end
 
   @doc """
   Renders a header with title.
@@ -473,9 +474,9 @@ defmodule LvbugWeb.CoreComponents do
       end
 
     ~H"""
-    <div class="overflow-y-auto px-4 sm:overflow-visible sm:px-0">
+    <div class="px-4 overflow-y-auto sm:overflow-visible sm:px-0">
       <table class="w-[40rem] mt-11 sm:w-full">
-        <thead class="text-sm text-left leading-6 text-zinc-500">
+        <thead class="text-sm leading-6 text-left text-zinc-500">
           <tr>
             <th :for={col <- @col} class="p-0 pb-4 pr-6 font-normal"><%= col[:label] %></th>
             <th :if={@action != []} class="relative p-0 pb-4">
@@ -486,7 +487,7 @@ defmodule LvbugWeb.CoreComponents do
         <tbody
           id={@id}
           phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}
-          class="relative divide-y divide-zinc-100 border-t border-zinc-200 text-sm leading-6 text-zinc-700"
+          class="relative text-sm leading-6 border-t divide-y divide-zinc-100 border-zinc-200 text-zinc-700"
         >
           <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group hover:bg-zinc-50">
             <td
@@ -495,15 +496,15 @@ defmodule LvbugWeb.CoreComponents do
               class={["relative p-0", @row_click && "hover:cursor-pointer"]}
             >
               <div class="block py-4 pr-6">
-                <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
+                <span class="absolute right-0 -inset-y-px -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
                 <span class={["relative", i == 0 && "font-semibold text-zinc-900"]}>
                   <%= render_slot(col, @row_item.(row)) %>
                 </span>
               </div>
             </td>
-            <td :if={@action != []} class="relative w-14 p-0">
-              <div class="relative whitespace-nowrap py-4 text-right text-sm font-medium">
-                <span class="absolute -inset-y-px -right-4 left-0 group-hover:bg-zinc-50 sm:rounded-r-xl" />
+            <td :if={@action != []} class="relative p-0 w-14">
+              <div class="relative py-4 text-sm font-medium text-right whitespace-nowrap">
+                <span class="absolute left-0 -inset-y-px -right-4 group-hover:bg-zinc-50 sm:rounded-r-xl" />
                 <span
                   :for={action <- @action}
                   class="relative ml-4 font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
@@ -538,7 +539,7 @@ defmodule LvbugWeb.CoreComponents do
     <div class="mt-14">
       <dl class="-my-4 divide-y divide-zinc-100">
         <div :for={item <- @item} class="flex gap-4 py-4 text-sm leading-6 sm:gap-8">
-          <dt class="w-1/4 flex-none text-zinc-500"><%= item.title %></dt>
+          <dt class="flex-none w-1/4 text-zinc-500"><%= item.title %></dt>
           <dd class="text-zinc-700"><%= render_slot(item) %></dd>
         </div>
       </dl>
@@ -563,7 +564,7 @@ defmodule LvbugWeb.CoreComponents do
         navigate={@navigate}
         class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
       >
-        <.icon name="hero-arrow-left-solid" class="h-3 w-3" />
+        <.icon name="hero-arrow-left-solid" class="w-3 h-3" />
         <%= render_slot(@inner_block) %>
       </.link>
     </div>
@@ -586,7 +587,7 @@ defmodule LvbugWeb.CoreComponents do
   ## Examples
 
       <.icon name="hero-x-mark-solid" />
-      <.icon name="hero-arrow-path" class="ml-1 w-3 h-3 animate-spin" />
+      <.icon name="hero-arrow-path" class="w-3 h-3 ml-1 animate-spin" />
   """
   attr :name, :string, required: true
   attr :class, :string, default: nil
@@ -672,5 +673,140 @@ defmodule LvbugWeb.CoreComponents do
   """
   def translate_errors(errors, field) when is_list(errors) do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
+  end
+
+  #
+  attr :id, :any, default: nil
+  attr :name, :any
+  # attr :label, :string, default: nil
+  attr :value, :any
+
+  attr :type, :string,
+    default: "text",
+    values: ~w(checkbox color date datetime-local email file hidden month number password
+               range radio search select tel text textarea time url week)
+
+  attr :field, Phoenix.HTML.FormField,
+    doc: "a form field struct retrieved from the form, for example: @form[:email]"
+
+  attr :errors, :list, default: []
+  attr :warnings, :list, default: []
+  attr :checked, :boolean, doc: "the checked flag for checkbox inputs"
+  attr :prompt, :string, default: nil, doc: "the prompt for select inputs"
+  attr :options, :list, doc: "the options to pass to Phoenix.HTML.Form.options_for_select/2"
+  attr :multiple, :boolean, default: false, doc: "the multiple flag for select inputs"
+  attr :radio_value, :any, doc: "the value for radio inputs"
+
+  attr :debug_field, :any, default: nil
+
+  attr :rest, :global,
+    include: ~w(accept autocomplete capture cols disabled form list max maxlength min minlength
+                multiple pattern placeholder readonly required rows size step phx-focus phx-blur)
+
+  slot :inner_block
+
+  def input3(%{field: %Phoenix.HTML.FormField{} = field} = assigns) do
+    require Logger
+
+    Logger.warning(
+      "yooo field #{field.name} errors: #{inspect(field.errors)} used? #{Phoenix.Component.used_input?(field)}"
+    )
+
+    errors = find_errors(field)
+
+    warnings = field.form.source |> Map.get(:warnings, [])
+
+    warnings =
+      warnings
+      |> Enum.filter(fn {f, {msg, meta}} ->
+        f == field.field
+      end)
+      |> Enum.map(fn {f, {msg, meta}} ->
+        if Phoenix.Component.used_input?(field), do: msg, else: []
+      end)
+
+    assigns
+    |> assign(:debug_field, field)
+    |> assign(field: nil, id: assigns.id || field.id)
+    |> assign(:errors, errors)
+    |> assign(:warnings, warnings)
+    |> assign_new(:name, fn ->
+      if assigns.multiple,
+        do: field.name <> "[]",
+        else: field.name
+    end)
+    |> assign_new(:value, fn -> field.value end)
+    |> input3()
+  end
+
+  # All other inputs text, datetime-local, url, password, etc. are handled here...
+  def input3(assigns) do
+    ~H"""
+    <div>
+      <input
+        type={@type}
+        name={@name}
+        id={@id}
+        value={Phoenix.HTML.Form.normalize_value(@type, @value)}
+        class={[
+          "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset  placeholder:text-gray-400 focus:ring-2 focus:ring-inset  sm:max-w-xs sm:text-sm sm:leading-6",
+          @errors == [] && "ring-gray-300 focus:ring-cata-blue-600",
+          @errors != [] && "ring-rose-400 focus:ring-rose-400"
+        ]}
+        {@rest}
+      />
+      <div :if={true}>used? <%= @name %>: <%= Phoenix.Component.used_input?(@debug_field) %></div>
+      <div :if={true}>errors <%= @name %>: <%= inspect(@errors) %> err:</div>
+      <div :if={false}>warnings <%= @name %>: <%= inspect(@warnings) %> err:</div>
+
+      <HurlerWeb.Components.Common.alert :for={warning <- @warnings} kind={:warning} class="mt-4">
+        <:title>
+          <%= warning %>
+        </:title>
+      </HurlerWeb.Components.Common.alert>
+      <.error :for={msg <- @errors} error_for={@name}><%= msg %></.error>
+    </div>
+    """
+  end
+
+  def find_errors(field) do
+    field.errors
+    |> Enum.filter(fn {msg, meta} ->
+      if meta[:force_display] == true do
+        true
+      else
+        Phoenix.Component.used_input?(field)
+      end
+    end)
+    |> Enum.map(fn e -> translate_error(e) end)
+  end
+
+  @doc """
+  Generates a generic error message.
+  """
+  attr :error_for, :string,
+    required: false,
+    doc: "mostly so we can assert the correct error message is shown for a particular field"
+
+  slot(:inner_block, required: true)
+
+  def error(assigns) do
+    if assigns[:error_for] do
+      ~H"""
+      <p
+        role="alert"
+        error-for={@error_for}
+        class="flex gap-3 mt-3 text-sm leading-6 error text-rose-600"
+      >
+        <%= render_slot(@inner_block) %>
+      </p>
+      """
+    else
+      ~H"""
+      <p role="alert" class="flex gap-3 mt-3 text-sm leading-6 error text-rose-600">
+        <%= render_slot(@inner_block) %>
+      </p>
+      """
+    end
   end
 end
